@@ -1,0 +1,83 @@
+import React from "react";
+import "./style.css";
+
+export default function App() {
+  return (
+    <div>
+      <Lista/>
+    </div>
+  );
+}
+import { useState } from 'react';
+
+import { useState } from 'react';
+
+const productoDatos = [
+  {id:435, nombre:"tarea1"},
+  {id:530, nombre:"tarea2"},
+  {id:532, nombre:"tarea3"},
+  ];
+  
+
+
+function Lista() {
+
+    const [productosSeleccionados, setProductosSeleccionados] = useState([]);
+
+
+
+    const handlerSeleccion = (producto) => {
+        var itemCarrito = {
+            producto: producto,
+            
+        }
+
+        var listaProducto = productosSeleccionados.filter((carrito) => (carrito.producto.id === producto.id));
+
+        if (listaProducto.length === 0) {
+            setProductosSeleccionados((listaActual) => {
+                const listaNueva = [...listaActual];
+                listaNueva.push(itemCarrito)
+                return listaNueva;
+            });
+        } else {
+
+
+            const listaNueva = productosSeleccionados.map((listaViejaItem) => listaViejaItem.producto.id === producto.id? {
+
+                ...listaViejaItem, cantidad:listaViejaItem.cantidad+1}:listaViejaItem);
+
+            setProductosSeleccionados(listaNueva);
+        }
+    }
+
+    const listaProductosDisponibles = productoDatos.map((producto) => <ProductoSeleccion
+        key={producto.id}
+        producto={producto}
+        funcionProductoSeleccionado={handlerSeleccion}
+    />);
+
+    //
+
+    const listProductosSeleccionados = productosSeleccionados.map(
+        (itemCarrito) => <li key={itemCarrito.producto.id}>Nombre:{itemCarrito.producto.nombre}, Id:{itemCarrito.producto.id}, </li>
+    );
+
+    return <>
+       
+
+        <h3>Tareas disponibles</h3>
+        {listaProductosDisponibles}
+        <h3>Tareas seleccionados</h3>
+        <ul>{listProductosSeleccionados}</ul>
+    </>
+}
+
+function ProductoSeleccion({ producto, funcionProductoSeleccionado }) {
+    return <div>
+       {producto.nombre}    Id: {producto.id}
+        <button onClick={(e) => funcionProductoSeleccionado(producto)} >Seleccionar</button>
+    </div>
+}
+
+export default Lista;
